@@ -19,4 +19,4 @@
 - add self-host chat server, a server run right on your computer!
 
   *(It maybe a little bit of complicated but it'll definitely worth!)*
-- add a ** server hall ** to let people connect the public hall more easily
+- add a **server hall** to let people connect the public hall more easily
