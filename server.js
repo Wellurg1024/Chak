@@ -1,4 +1,3 @@
-const os = require('os');
 const fs = require('fs');
 const net = require('net');
 
@@ -10,14 +9,8 @@ const clients = [];
 
 server.on('connection', (socket) => {
     const clientIP = getClientIP(socket);
-
-    // 检查是否已经存在该 IP 地址
-    if (isClientExists(clientIP)) {
-        console.log(`客户端 ${clientIP} 已经存在，但仍允许连接。`);
-    } else {
         // 将新连接的客户端添加到 clients 数组中
         clients.push(socket);
-    }
 
     // 发送连接提示消息给客户端和控制台
     const connectedMessage = `[${clientIP}] 已连接到服务器！\n`;
@@ -57,17 +50,6 @@ server.on('connection', (socket) => {
         }
     });
 });
-
-// 检查指定 IP 地址是否已经存在于 clients 数组中
-function isClientExists(ip) {
-    return clients.some((client) => getClientIP(client) === ip);
-}
-
-
-// 检查指定 IP 地址是否已经存在于 clients 数组中
-function isClientExists(ip) {
-    return clients.some((client) => getClientIP(client) === ip);
-}
 
 // 获取客户端的 IP 地址
 function getClientIP(socket) {
