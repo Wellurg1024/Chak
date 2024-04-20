@@ -78,7 +78,7 @@ function getStatusMessage() {
     const memoryUsage = formatBytes(process.memoryUsage().rss);
     const cpuTemperature = getCPUTemperature();
 
-    const onlineCount = clients.length - 1;
+    const onlineCount = clients.length;
     const statusMessage = `Server Status:\nMemory Usage: ${memoryUsage}\nCPU Temperature: ${cpuTemperature}\nOnline Count: ${onlineCount}\n`;
 
     return statusMessage;
