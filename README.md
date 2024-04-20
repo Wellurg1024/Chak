@@ -6,7 +6,6 @@
 2. run below command in your terminal
     - ` npm install net`
     - `npm install fs`
-    - `npm install os`
 3. then run `node server.js` on the server.
 4. keep sure devices are under the same Wi-Fi.
 5. run `node client.js` on the client devices, congratulation!
