@@ -4,9 +4,10 @@ const readline = require('readline');
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
+  prompt: '', // 禁用默认提示符
 });
 
-rl.question('ip > ', (hostIP) => {
+rl.question('ip> ', (hostIP) => {
   console.log(`try connecting ${hostIP}!`);
   connectToServer(hostIP);
 });
@@ -16,7 +17,6 @@ function connectToServer(ip) {
     console.log('已连接到服务器！');
   });
 
-  // 当接收到服务器发送的数据时，打印到终端
   socket.on('data', (data) => {
     let text = data.toString();
     console.log(text);
@@ -24,23 +24,31 @@ function connectToServer(ip) {
 
   let userInput = ''; // 存储用户输入的变量
 
-  const stdinListener = (data) => {
-    userInput += data.toString();
+  const handleUserInput = (line) => {
+    const input = line.trim();
+
+    if (input === '\u0003') { // 检测到 Ctrl+C 输入，结束程序
+      process.exit();
+    }
+
+    if (line === '\u0008') { // 检测到 Backspace 输入，删除输入信息的最后一个字符
+      if (userInput.length > 0) {
+        userInput = userInput.slice(0, -1);
+        readline.clearLine(process.stdout, 0); // 清除终端上当前行的内容
+        readline.cursorTo(process.stdout, 0); // 将光标移动到行首
+        process.stdout.write(rl.prompt + userInput); // 重新显示输入信息
+      }
+    } else if (input) { // 发送用户输入的信息
+      socket.write(input);
+      userInput = ''; // 清空用户输入
+    }
   };
 
-  process.stdin.on('data', stdinListener);
-
-  rl.on('line', () => {
-    socket.write(userInput.trim()); // 发送存储的用户输入
-    userInput = ''; // 重置用户输入
-    process.stdin.removeListener('data', stdinListener);
-    process.stdin.on('data', stdinListener); // 重新注册监听器，等待下一次用户输入
-  });
+  rl.on('line', handleUserInput);
 
   // 当与服务器断开连接时显示提示消息
   socket.on('end', () => {
     console.log('与服务器断开连接');
-    process.stdin.removeListener('data', stdinListener);
     rl.close();
   });
 }
