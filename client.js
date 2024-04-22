@@ -2,7 +2,7 @@ const readline = require('readline');
 const net = require('net');
 
 function scanLocalNetwork() {
-  const subnet = '192.168.0'; // 更换为您的局域网子网
+  const subnet = '192.168.0'; //change it to your local network
   const port = 3000;
   const timeout = 200;
 
@@ -52,7 +52,7 @@ function connectToServer(ip) {
   });
 
   const socket = net.connect({ host: ip, port: 3000 }, () => {
-    console.log('已连接到服务器！');
+    console.log('Connected to the server');
   });
 
   socket.on('data', (data) => {
@@ -60,28 +60,28 @@ function connectToServer(ip) {
     console.log(text);
   });
 
-  let userInput = ''; // 存储用户输入的变量
+  let userInput = '';
 
   const handleUserInput = (line) => {
     const input = line.trim();
   
-    if (line === '\u0008') { // 检测到 Backspace 输入，删除输入信息的最后一个字符
+    if (line === '\u0008') {
       if (userInput.length > 0) {
         userInput = userInput.slice(0, -1);
-        readline.clearLine(process.stdout, 0); // 清除终端上当前行的内容
-        readline.cursorTo(process.stdout, 0); // 将光标移动到行首
-        process.stdout.write(rl.prompt + userInput); // 重新显示输入信息
+        readline.clearLine(process.stdout, 0);
+        readline.cursorTo(process.stdout, 0);
+        process.stdout.write(rl.prompt + userInput);
       }
-    } else if (line) { // 发送用户输入的信息
+    } else if (line) {
       socket.write(input);
-      userInput = ''; // 清空用户输入
+      userInput = '';
     }
   };
   rl.on('line', handleUserInput);
 
-  // 当与服务器断开连接时显示提示消息
+
   socket.on('end', () => {
-    console.log('与服务器断开连接');
+    console.log('End connection');
     rl.close();
   });
 }
@@ -101,25 +101,25 @@ scanLocalNetwork()
       });
 
       const getValidIndex = () => {
-        rl.question('请输入要连接的服务器的数字索引：', (answer) => {
+        rl.question('plz input the index of ip u want to connect to：', (answer) => {
           const selectedIndex = parseInt(answer);
           if (!isNaN(selectedIndex) && selectedIndex >= 1 && selectedIndex <= openHostsIPs.length) {
             const selectedIP = openHostsIPs[selectedIndex - 1];
-            console.log('您选择的服务器 IP 地址是：', selectedIP);
+            console.log('You select：', selectedIP);
             connectToServer(selectedIP);
             rl.close();
           } else {
-            console.log('无效的索引，请重新输入有效的数字索引。');
-            getValidIndex(); // 递归调用重新获取有效的索引
+            console.log('plz select again');
+            getValidIndex();
           }
         });
       };
 
       getValidIndex();
     } else {
-      console.log('未找到可连接的服务器。');
+      console.log('Find no host');
     }
   })
   .catch((error) => {
-    console.error('网络扫描出错：', error);
+    console.error('Err with net-scan', error);
   });
