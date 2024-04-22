@@ -1,11 +1,17 @@
 # Chak
 ## if you can run node.js on a device, you can run CHAK.
 
+------------------------------------------------
+the 4/22/2024 uploading version is not usable!
+------------------------------------------------
+
+
 ### How to use
 1. download `node.js` and `npm`.
 2. run below command in your terminal
     - ` npm install net`
     - `npm install fs`
+    - `npm install os`
 3. then run `node server.js` on the server.
 4. keep sure devices are under the same Wi-Fi.
 5. run `node client.js` on the client devices, congratulation!
